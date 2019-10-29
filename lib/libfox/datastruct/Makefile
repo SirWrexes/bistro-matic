@@ -91,6 +91,7 @@ SRC += ./src/tree/tree_create.c
 SRC += ./src/tree/tree_destroy.c
 SRC += ./src/tree/tnode_create.c
 SRC += ./src/tree/tnode_destroy.c
+SRC += ./src/stack/autodestructor.c
 SRC += ./src/stack/stack_create.c
 SRC += ./src/stack/stack_destroy.c
 SRC += ./src/stack/stack_push.c

@@ -9,10 +9,10 @@
 #include <malloc.h>
 #include "datastruct/fox_stack.h"
 
-static bool push_to_top(stack_t stack, void *data)
+static bool push_to_top(foxstack_t stack, void *data)
 {
-    sitem_t oldtop = stack->faketop;
-    sitem_t newtop = malloc(sizeof(*newtop));
+    foxsitem_t oldtop = stack->faketop;
+    foxsitem_t newtop = malloc(sizeof(*newtop));
 
     if (newtop == NULL)
         return true;
@@ -24,9 +24,9 @@ static bool push_to_top(stack_t stack, void *data)
     return false;
 }
 
-static bool push_to_first_available(stack_t stack, void *data)
+static bool push_to_first_available(foxstack_t stack, void *data)
 {
-    sitem_t push = stack->faketop;
+    foxsitem_t push = stack->faketop;
 
     while (push->i > stack->items + 1)
         push = push->prev;
@@ -38,7 +38,7 @@ static bool push_to_first_available(stack_t stack, void *data)
 }
 
 __nonnull
-bool stack_push(stack_t stack, void *data)
+bool stack_push(foxstack_t stack, void *data)
 {
     if (stack->faketop == NULL || stack->faketop->i == stack->items)
         return push_to_top(stack, data);

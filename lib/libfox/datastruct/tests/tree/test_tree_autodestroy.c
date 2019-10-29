@@ -5,14 +5,17 @@
 ** Tree with a garbage collector implementation
 */
 
+#include <signal.h>
+#include <stddef.h>
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
+
 #include "fox_datastruct.h"
 
-Test(autotree, regular_usage)
+Test(autotree, regular_usage, .signal = SIGABRT)
 {
-    autotree_t tree = NULL;
+    autofoxtree_t tree = NULL;
 
     tree_create(&tree);
-    cr_assert(true);
+    free(tree);
 }

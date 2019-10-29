@@ -8,9 +8,9 @@
 #include "datastruct/fox_stack.h"
 
 __nonnull
-void *stack_pop(stack_t stack)
+void *stack_pop(foxstack_t stack)
 {
-    sitem_t pop = stack->faketop;
+    foxsitem_t pop = stack->faketop;
     void *data = NULL;
 
     if (pop == NULL)
