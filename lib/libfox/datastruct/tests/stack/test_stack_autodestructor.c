@@ -12,10 +12,10 @@
 
 #include "datastruct/fox_stack.h"
 
-Test(autostack, regular_usage, .signal = SIGABRT)
+Test(autostack, regular_usage)
 {
-    autofoxtstack_t stack = NULL;
+    autofoxstack_t stack = NULL;
 
     stack_create(&stack);
-    free(stack);
+    cr_assert(true);
 }

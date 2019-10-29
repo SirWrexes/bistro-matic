@@ -8,18 +8,19 @@
 #
 # Config
 ##########################################
-NAME    :=  string
-BIN     :=  libfox_$(NAME).a
-TESTBIN :=  utests_$(NAME)
-SHELL   :=  /bin/bash
-MAKE    :=  make --no-print-directory -C
-RM      :=  rm -f
-CP      :=  cp -t
-MV      :=  mv -t
-GCOV    :=  gcovr
-CC      :=  gcc
+NAME     :=  string
+BIN      :=  libfox_$(NAME).a
+TESTBIN  :=  utests_$(NAME)
+DEBUGBIN :=  debug_$(NAME)
+SHELL    :=  /bin/bash
+MAKE     :=  make --no-print-directory -C
+RM       :=  rm -f
+CP       :=  cp -t
+MV       :=  mv -t
+GCOV     :=  gcovr
+CC       :=  gcc
 .DEFAULT_GOAL := all
-COMPILEDBTARGET := all tests
+COMPILEDBTARGET := all tests debug
 ##########################################
 
 
@@ -120,6 +121,7 @@ CFLAGS      += -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
 ##########################################
 OBJ         := $(SRC:.c=.o) $(DEPSRC:.c=.o)
 DEP         := $(OBJ:.o=.d) $(DEPSRC:.c=.d)
+COV         := $(notdir $(OBJ:.o=.gc*)) $(notdir $(TST:.c=.gc*)) $(notdir $(WRAPSRC:.c=.gc*))
 -include $(DEP)
 .PRECIOUS   := $(DEP)
 ##########################################
@@ -142,10 +144,10 @@ COVFLAGS += --exclude='.*wrap_.*'
 %.a:
 	@if [ -e $@ ];                                  								\
 	then                                            								\
-	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);	\
+	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
 	  ar ru $(BIN) $^;                              								\
 	else                                            								\
-	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);	\
+	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
 	  ar rc $(BIN) $^;                              								\
 	fi
 
@@ -168,11 +170,18 @@ $(NAME): compiledb $(BIN) tests
 $(BIN): $(OBJ)
 
 $(TESTBIN): CFLAGS  += --coverage
+$(TESTBIN): CFLAGS  += $(WRAPFLAGS)
 $(TESTBIN): LDFLAGS := -lcriterion
 $(TESTBIN): SRC += $(DEPSRC) $(TST) $(WRAPSRC)
 $(TESTBIN): compiledb
-	@$(RM) *.gc*
+	@$(RM) $(COV)
 	@$(CC) -o $@ $(CFLAGS) $(SRC) $(LDFLAGS)
+
+.PHONY: debug
+debug: $(DEBUGBIN)
+$(DEBUGBIN): CFLAGS += -ggdb3 -rdynamic
+$(DEBUGBIN): $(SRC) $(DEBUGMAIN)
+	$(CC) -o $@ $(CFLAGS) $(DEBUGMAIN) $(SRC) $(LDFLAGS)
 
 .PHONY: tests test_report
 tests: test_report
@@ -198,11 +207,13 @@ fclean:
 	@$(ECHO) $(CRED)Delete$(CRESET) dependancy files
 	@$(RM) $(DEP)
 	@$(ECHO) $(CRED)Delete$(CRESET) coverage files
-	@$(RM) *.gc*
+	@$(RM) $(COV)
 	@$(ECHO) $(CRED)Delete$(CRESET) $(BIN)
 	@$(RM) $(BIN)
 	@$(ECHO) $(CRED)Delete$(CRESET) $(TESTBIN)
 	@$(RM) $(TESTBIN)
+	@$(ECHO) $(CRED)Delete$(CRESET) $(DEBUGBIN)
+	@$(RM) $(DEBUGBIN)
 
 .PHONY: re
 re: fclean all

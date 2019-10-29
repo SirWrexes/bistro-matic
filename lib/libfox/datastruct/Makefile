@@ -14,7 +14,7 @@ TESTBIN  :=  utests_$(NAME)
 DEBUGBIN :=  debug_$(NAME)
 SHELL    :=  /bin/bash
 MAKE     :=  make --no-print-directory -C
-RM       :=  rm -rf
+RM       :=  rm -f
 CP       :=  cp -t
 MV       :=  mv -t
 GCOV     :=  gcovr
@@ -86,12 +86,12 @@ endif
 # Sources
 ##########################################
 DEBUGMAIN := ./src/debugmain.c
-SRC := ./src/tree/autodestructor.c
+SRC := ./src/tree/tree_autodestructor.c
 SRC += ./src/tree/tree_create.c
 SRC += ./src/tree/tree_destroy.c
 SRC += ./src/tree/tnode_create.c
 SRC += ./src/tree/tnode_destroy.c
-SRC += ./src/stack/autodestructor.c
+SRC += ./src/stack/stack_autodestructor.c
 SRC += ./src/stack/stack_create.c
 SRC += ./src/stack/stack_destroy.c
 SRC += ./src/stack/stack_push.c
@@ -102,11 +102,12 @@ SRC += ./src/stack/stack_pop.c
 #
 # Tests
 ##########################################
-TST := ./tests/tree/test_tree_autodestroy.c
+TST := ./tests/tree/test_tree_autodestructor.c
 TST += ./tests/tree/test_tree_create.c
 TST += ./tests/tree/test_tree_destroy.c
 TST += ./tests/tree/test_tnode_create.c
 TST += ./tests/tree/test_tnode_destroy.c
+TST += ./tests/stack/test_stack_autodestructor.c
 TST += ./tests/stack/test_stack_create.c
 TST += ./tests/stack/test_stack_destroy.c
 TST += ./tests/stack/test_stack_push.c
@@ -128,6 +129,7 @@ WRAPFLAGS   := -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
 ##########################################
 OBJ         := $(SRC:.c=.o) $(DEPSRC:.c=.o)
 DEP         := $(OBJ:.o=.d) $(DEPSRC:.c=.d)
+COV         := $(notdir $(OBJ:.o=.gc*)) $(notdir $(TST:.c=.gc*)) $(notdir $(WRAPSRC:.c=.gc*))
 -include $(DEP)
 .PRECIOUS   := $(DEP)
 ##########################################
@@ -148,13 +150,13 @@ COVFLAGS += --exclude='.*wrap_.*'
 # Reciepes
 ##########################################
 %.a:
-	@if [ -e $@ ];                                  								\
-	then                                            								\
-	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);	\
-	  ar ru $(BIN) $^;                              								\
-	else                                            								\
-	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);	\
-	  ar rc $(BIN) $^;                              								\
+	@if [ -e $@ ];                                                             \
+	then                                                                       \
+	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET); \
+	  ar ru $(BIN) $^;                                                         \
+	else                                                                       \
+	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET); \
+	  ar rc $(BIN) $^;                                                         \
 	fi
 
 %.o: CFLAGS += -MT $@ -MMD
@@ -180,7 +182,7 @@ $(TESTBIN): CFLAGS  += $(WRAPFLAGS)
 $(TESTBIN): LDFLAGS := -lcriterion
 $(TESTBIN): SRC += $(DEPSRC) $(TST) $(WRAPSRC)
 $(TESTBIN): compiledb
-	@$(RM) *.gc*
+	@$(RM) $(COV)
 	@$(CC) -o $@ $(CFLAGS) $(SRC) $(LDFLAGS)
 
 .PHONY: debug
@@ -213,7 +215,7 @@ fclean:
 	@$(ECHO) $(CRED)Delete$(CRESET) dependancy files
 	@$(RM) $(DEP)
 	@$(ECHO) $(CRED)Delete$(CRESET) coverage files
-	@$(RM) *.gc*
+	@$(RM) $(COV)
 	@$(ECHO) $(CRED)Delete$(CRESET) $(BIN)
 	@$(RM) $(BIN)
 	@$(ECHO) $(CRED)Delete$(CRESET) $(TESTBIN)

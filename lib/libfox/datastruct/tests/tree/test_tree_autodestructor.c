@@ -12,10 +12,9 @@
 
 #include "fox_datastruct.h"
 
-Test(autotree, regular_usage, .signal = SIGABRT)
+Test(autotree, regular_usage)
 {
     autofoxtree_t tree = NULL;
 
     tree_create(&tree);
-    free(tree);
 }
