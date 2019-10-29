@@ -86,32 +86,40 @@ endif
 # Sources
 ##########################################
 DEBUGMAIN := ./src/debugmain.c
+# --- TREE
 SRC := ./src/tree/tree_autodestructor.c
 SRC += ./src/tree/tree_create.c
 SRC += ./src/tree/tree_destroy.c
 SRC += ./src/tree/tnode_create.c
+# --- STACK
 SRC += ./src/tree/tnode_destroy.c
 SRC += ./src/stack/stack_autodestructor.c
 SRC += ./src/stack/stack_create.c
 SRC += ./src/stack/stack_destroy.c
 SRC += ./src/stack/stack_push.c
 SRC += ./src/stack/stack_pop.c
+# --- LIST
+SRC += ./src/list/list_create.c
 ##########################################
 
 
 #
 # Tests
 ##########################################
+# --- TREE
 TST := ./tests/tree/test_tree_autodestructor.c
 TST += ./tests/tree/test_tree_create.c
 TST += ./tests/tree/test_tree_destroy.c
 TST += ./tests/tree/test_tnode_create.c
 TST += ./tests/tree/test_tnode_destroy.c
+# --- STACK
 TST += ./tests/stack/test_stack_autodestructor.c
 TST += ./tests/stack/test_stack_create.c
 TST += ./tests/stack/test_stack_destroy.c
 TST += ./tests/stack/test_stack_push.c
 TST += ./tests/stack/test_stack_pop.c
+# --- LIST
+TST += ./tests/list/test_list_create.c
 ##########################################
 WRAPSRC := ./tests/wrappers/wrap_malloc.c
 WRAPPED := malloc
