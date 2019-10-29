@@ -39,14 +39,14 @@ leafcutter_t *treedata_destructor(void) __const;
 
 struct tree_s
 {
-    count_t nodes;    // Node count in the tree
+    count_t nodes; // Node count in the tree
     tnode_t trunk; // root of the tree
 };
 
 struct tnode_s
 {
-    tree_t root;      // Wherever you are, know which tree you're in.
-    void *data;       // Node data
+    tree_t root;   // Wherever you are, know which tree you're in.
+    void *data;    // Node data
     tnode_t lnext; // Left branch/leaf
     tnode_t rnext; // Right branch/leaf
 };

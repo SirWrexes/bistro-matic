@@ -29,7 +29,7 @@ struct stack_s
 {
     count_t items;   // Item count in the stack
     sitem_t faketop; // Top of the stack (including empty items)
-    // If you want to get the real top of the stack, use stack_top()
+    sitem_t realtop; // Actual top of the stack
 };
 
 struct sitem_s
