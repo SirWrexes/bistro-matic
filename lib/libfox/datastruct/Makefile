@@ -100,6 +100,7 @@ SRC += ./src/stack/stack_push.c
 SRC += ./src/stack/stack_pop.c
 # --- LIST
 SRC += ./src/list/list_create.c
+SRC += ./src/list/node_create.c
 ##########################################
 
 
@@ -120,6 +121,7 @@ TST += ./tests/stack/test_stack_push.c
 TST += ./tests/stack/test_stack_pop.c
 # --- LIST
 TST += ./tests/list/test_list_create.c
+TST += ./tests/list/test_node_create.c
 ##########################################
 WRAPSRC := ./tests/wrappers/wrap_malloc.c
 WRAPPED := malloc

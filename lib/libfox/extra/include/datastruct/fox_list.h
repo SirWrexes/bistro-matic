@@ -37,6 +37,14 @@ struct foxlist_s
     foxnode_t tail; // Bottom of the list
 };
 
+struct foxnode_s
+{
+    index_t i;      // Position in the list
+    void *data;     // Data container
+    foxnode_t prev; // Previous node
+    foxnode_t next; // Next node
+};
+
 /* ------------------------------------------------------------------------ */
 
 // Create a list
