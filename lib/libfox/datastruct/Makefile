@@ -8,18 +8,19 @@
 #
 # Config
 ##########################################
-NAME    :=  datastruct
-BIN     :=  libfox_$(NAME).a
-TESTBIN :=  utests_$(NAME)
-SHELL   :=  /bin/bash
-MAKE    :=  make --no-print-directory -C
-RM      :=  rm -rf
-CP      :=  cp -t
-MV      :=  mv -t
-GCOV    :=  gcovr
-CC      :=  gcc
+NAME     :=  datastruct
+BIN      :=  libfox_$(NAME).a
+TESTBIN  :=  utests_$(NAME)
+DEBUGBIN :=  debug_$(NAME)
+SHELL    :=  /bin/bash
+MAKE     :=  make --no-print-directory -C
+RM       :=  rm -rf
+CP       :=  cp -t
+MV       :=  mv -t
+GCOV     :=  gcovr
+CC       :=  gcc
 .DEFAULT_GOAL := all
-COMPILEDBTARGET := all tests
+COMPILEDBTARGET := all tests debug
 ##########################################
 
 #
@@ -84,6 +85,7 @@ endif
 #
 # Sources
 ##########################################
+DEBUGMAIN := ./src/debugmain.c
 SRC := ./src/tree/autodestructor.c
 SRC += ./src/tree/tree_create.c
 SRC += ./src/tree/tree_destroy.c
@@ -121,7 +123,7 @@ INCDIRS     := ./include
 CFLAGS      := -Wall -Wextra
 CFLAGS      += -Werror
 CFLAGS      += $(foreach dir, $(INCDIRS), -iquote $(dir))
-CFLAGS      += -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
+WRAPFLAGS   := -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
 ##########################################
 OBJ         := $(SRC:.c=.o) $(DEPSRC:.c=.o)
 DEP         := $(OBJ:.o=.d) $(DEPSRC:.c=.d)
@@ -173,11 +175,18 @@ $(NAME): compiledb $(BIN) tests
 $(BIN): $(OBJ)
 
 $(TESTBIN): CFLAGS  += --coverage
+$(TESTBIN): CFLAGS  += $(WRAPFLAGS)
 $(TESTBIN): LDFLAGS := -lcriterion
 $(TESTBIN): SRC += $(DEPSRC) $(TST) $(WRAPSRC)
 $(TESTBIN): compiledb
 	@$(RM) *.gc*
 	@$(CC) -o $@ $(CFLAGS) $(SRC) $(LDFLAGS)
+
+.PHONY: debug
+debug: $(DEBUGBIN)
+$(DEBUGBIN): CFLAGS += -ggdb3 -rdynamic
+$(DEBUGBIN): $(SRC) $(DEBUGMAIN)
+	$(CC) -o $@ $(CFLAGS) $(DEBUGMAIN) $(SRC) $(LDFLAGS)
 
 .PHONY: tests test_report
 tests: test_report
@@ -208,6 +217,8 @@ fclean:
 	@$(RM) $(BIN)
 	@$(ECHO) $(CRED)Delete$(CRESET) $(TESTBIN)
 	@$(RM) $(TESTBIN)
+	@$(ECHO) $(CRED)Delete$(CRESET) $(DEBUGBIN)
+	@$(RM) $(DEBUGBIN)
 
 .PHONY: re
 re: fclean all
