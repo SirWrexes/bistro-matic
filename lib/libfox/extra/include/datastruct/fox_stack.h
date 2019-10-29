@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2019
-** <project_name>
+** Libfox
 ** File description:
-** fox_stacck.h -- No description
+** Pile up things it's fun
 */
 
 #ifndef FOX_STACK_H
@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include "fox_define.h"
 
-/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------ */
 
 // Remember: These are dynamically allocated pointers.
 // You MUST use the corresponding destructor when you're done with them.
@@ -31,23 +31,23 @@ typedef void (*pilebreaker_t)();
 void jenga(foxstack_t *stackptr) __nonnull;
 pilebreaker_t *stackdata_destructor(void) __const;
 
-/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------ */
 
 struct foxstack_s
 {
-    count_t items;   // Item count in the stack
+    count_t items;      // Item count in the stack
     foxsitem_t faketop; // Top of the stack (including empty items)
     foxsitem_t realtop; // Actual top of the stack
 };
 
 struct foxsitem_s
 {
-    index_t i;    // Placement in the stack
-    void *data;   // Item data
+    index_t i;       // Placement in the stack
+    void *data;      // Item data
     foxsitem_t prev; // Right branch/leaf
 };
 
-/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------ */
 
 // Create a stack
 // Returns true in case of error

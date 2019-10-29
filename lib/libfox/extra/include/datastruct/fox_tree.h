@@ -15,7 +15,7 @@
 /// A leaf is a node that has no branching (both left/right are NULL).
 /// A branch is a node tha has another branch or a leaf attached to it.
 
-/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------ */
 
 // Remember: These are dynamically allocated pointers.
 // You MUST use the corresponding destructor when you're done with them.
@@ -35,7 +35,7 @@ typedef void (*leafcutter_t)();
 void chainsaw(foxtree_t *treeptr) __nonnull;
 leafcutter_t *treedata_destructor(void) __const;
 
-/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------ */
 
 struct foxtree_s
 {
@@ -51,7 +51,7 @@ struct foxtnode_s
     foxtnode_t rnext; // Right branch/leaf
 };
 
-/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------ */
 
 // Create a binary tree
 // Returns true in case of error
