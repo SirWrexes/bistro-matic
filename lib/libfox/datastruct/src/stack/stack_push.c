@@ -20,6 +20,7 @@ static bool push_to_top(stack_t stack, void *data)
     newtop->data = data;
     newtop->prev = oldtop;
     stack->faketop = newtop;
+    stack->realtop = newtop;
     return false;
 }
 
@@ -30,6 +31,8 @@ static bool push_to_first_available(stack_t stack, void *data)
     while (push->i > stack->items + 1)
         push = push->prev;
     push->data = data;
+    push->prev = stack->realtop;
+    stack->realtop = push;
     stack->items += 1;
     return false;
 }

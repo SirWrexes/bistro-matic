@@ -15,10 +15,11 @@ void *stack_pop(stack_t stack)
 
     if (pop == NULL)
         return NULL;
-    while (pop != NULL && pop->data == NULL)
+    while (pop->i > stack->items)
         pop = pop->prev;
     data = pop->data;
     pop->data = NULL;
     stack->items -= 1;
+    stack->realtop = pop->prev != NULL ? pop->prev : pop;
     return data;
 }
