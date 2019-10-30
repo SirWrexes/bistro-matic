@@ -100,6 +100,7 @@ SRC += ./src/stack/stack_push.c
 SRC += ./src/stack/stack_pop.c
 # --- LIST
 SRC += ./src/list/list_addnode.c
+SRC += ./src/list/list_autodestructor.c
 SRC += ./src/list/list_create.c
 SRC += ./src/list/list_destroy.c
 SRC += ./src/list/node_create.c
@@ -124,6 +125,7 @@ TST += ./tests/stack/test_stack_push.c
 TST += ./tests/stack/test_stack_pop.c
 # --- LIST
 TST += ./tests/list/test_list_addnode.c
+TST += ./tests/list/test_list_autodestructor.c
 TST += ./tests/list/test_list_create.c
 TST += ./tests/list/test_list_destroy.c
 TST += ./tests/list/test_node_create.c
@@ -186,7 +188,7 @@ endif
 
 .PHONY: compiledb
 compiledb:
-	@[[ "$(shell which compiledb)" == "" ]] || compiledb -n make -ki $(COMPILEDBTARGET)
+	@[[ "$(shell which compiledb)" == "" ]] || compiledb -Sn make -ki $(COMPILEDBTARGET)
 
 .PHONY: all module $(NAME)
 all: $(NAME)
