@@ -174,12 +174,6 @@ COVFLAGS  += --exclude-directories='lib/libfox'
 %.o: %.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@$(ECHO$(NAME)) $(CLIGHTGREEN)Compile OK ✓$(CRESET) $@
-
-%.d: %.c
-	@set -e; rm -f $@; 									\
-	$(CC) -M $(CFLAGS) $< > $@.$$$$; 					\
-	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-	$(RM) $@.$$$$
 ##########################################
 
 
