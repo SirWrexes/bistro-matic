@@ -19,7 +19,7 @@ bool list_addnode(foxlist_t list, void *data)
         list->head = new;
         list->tail = new;
     } else  {
-        new->next = list->tail;
+        new->prev = list->tail;
         list->tail->next = new;
         list->tail = new;
     }
