@@ -99,7 +99,9 @@ SRC += ./src/stack/stack_destroy.c
 SRC += ./src/stack/stack_push.c
 SRC += ./src/stack/stack_pop.c
 # --- LIST
+SRC += ./src/list/list_addnode.c
 SRC += ./src/list/list_create.c
+SRC += ./src/list/list_destroy.c
 SRC += ./src/list/node_create.c
 SRC += ./src/list/node_destroy.c
 ##########################################
@@ -121,7 +123,9 @@ TST += ./tests/stack/test_stack_destroy.c
 TST += ./tests/stack/test_stack_push.c
 TST += ./tests/stack/test_stack_pop.c
 # --- LIST
+TST += ./tests/list/test_list_addnode.c
 TST += ./tests/list/test_list_create.c
+TST += ./tests/list/test_list_destroy.c
 TST += ./tests/list/test_node_create.c
 TST += ./tests/list/test_node_destroy.c
 ##########################################
@@ -180,8 +184,6 @@ endif
 	@$(ECHO) $(CLIGHTGREEN)$(CBOLD)Compile OK ✓$(CRESET) $@
 ##########################################
 
-
-
 .PHONY: compiledb
 compiledb:
 	@[[ "$(shell which compiledb)" == "" ]] || compiledb -n make -ki $(COMPILEDBTARGET)
@@ -239,4 +241,6 @@ fclean:
 	@$(RM) $(DEBUGBIN)
 
 .PHONY: re
-re: fclean all
+re:
+	@$(MAKE) . fclean
+	@$(MAKE) . all
