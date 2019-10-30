@@ -175,7 +175,7 @@
 
 #ifndef FOX_USHORT_TYPE
     #define FOX_USHORT_TYPE
-    typedef unsigned short sindex_t;
+    typedef unsigned short hindex_t;
 #endif // FOX_USHORT_TYPE
 
 #ifndef FOX_ULONG_TYPE
