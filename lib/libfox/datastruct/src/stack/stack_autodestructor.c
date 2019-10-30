@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2019
 ** Libfox
 ** File description:
-** Tree auto destructor for cleanup attribute
+** Stack auto destructor for cleanup attribute
 */
 
 #include "datastruct/fox_stack.h"

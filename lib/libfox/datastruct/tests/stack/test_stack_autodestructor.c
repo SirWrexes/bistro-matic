@@ -2,11 +2,9 @@
 ** EPITECH PROJECT, 2019
 ** Libfox
 ** File description:
-** UT: Stack with auto destruction macro type
+** UT: Stack smart pointer
 */
 
-#include <stddef.h>
-#include <signal.h>
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 
