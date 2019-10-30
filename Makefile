@@ -69,14 +69,14 @@ if __name__ == "__main__":
   main()
 endef
 
-ifndef ECHO
+ifndef ECHO$(NAME)
   $(call export PROGBAR) $(file >progressbar.py,$(PROGBAR))
   T := $(shell $(MAKE) . $(MAKECMDGOALS)	\
        -nrRf $(firstword $(MAKEFILE_LIST)) 	\
-       ECHO="PCOUNT$(NAME)" | grep -c "PCOUNT$(NAME)")
+       ECHO$(NAME)="COUNT$(NAME)" | grep -c "COUNT$(NAME)")
   N := x
   C = $(words $N)$(eval N := x $N)
-  ECHO = python ./progressbar.py --stepno=$C --nsteps=$T
+  ECHO$(NAME) = python ./progressbar.py --stepno=$C --nsteps=$T
 endif
 
 # ----------------------- MAKEFILE STARTS FROM HERE -------------------------- #
@@ -84,7 +84,7 @@ endif
 
 
 #
-# Sources
+# Source
 ##########################################
 MAIN :=
 SRC  :=
@@ -128,7 +128,7 @@ CFLAGS    += $(foreach dir, $(INCDIRS), -iquote $(dir))
 # ----------------------------------------
 OBJ       :=  $(SRC:.c=.o)
 DEP       :=  $(OBJ:.o=.d) $(MAIN:.c=.d)
-COV       :=  *.gcda *.gcno
+COV       :=  $(notdir $(DEP:.d=.gc*)) $(notdir $(TEST:.c=.gc*))
 .PRECIOUS :=  $(DEP)
 -include $(DEP)
 ##########################################
@@ -167,7 +167,7 @@ COVFLAGS  += --exclude='.*wrap_.*'
 %.o: CFLAGS += -MT $@ -MMD
 %.o: %.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@$(ECHO) $(CLIGHTGREEN)Compile OK ✓$(CRESET) $@
+	@$(ECHO$(NAME)) $(CLIGHTGREEN)Compile OK ✓$(CRESET) $@
 
 %.d: %.c
 	@set -e; rm -f $@; 									\
@@ -182,7 +182,7 @@ COVFLAGS  += --exclude='.*wrap_.*'
 ##########################################
 .PHONY: libfox
 libfox:
-	@$(ECHO) $(CORANGE)"Make libfox rule(s)"$(CRESET) $(foreach r,$(RULE),$(CBOLD)$r$(CRESET))
+	@$(ECHO$(NAME)) $(CORANGE)"Make libfox rule(s)"$(CRESET) $(CBOLD)$(foreach r,$(RULE),"$r")$(CRESET)
 	@$(MAKE) ./lib/libfox $(RULE)
 
 .PHONY: compiledb
@@ -193,8 +193,8 @@ compiledb:
 build: libfox
 build: | $(FILES)
 	@$(CC) -o $(TARGET) $(CFLAGS) $(FILES) $(LDFLAGS)
-	@$(ECHO) $(CBOLD)"Link OK"$(CRESET)
-	@$(ECHO) $(CBOLD)$(CLIGHTBLUE)"Done compiling"$(CRESET) $(CLIGHTBLUE)$@$(CRESET)
+	@$(ECHO$(NAME)) $(CBOLD)"Link OK"$(CRESET)
+	@$(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)"Done compiling"$(CRESET) $(CLIGHTBLUE)$@$(CRESET)
 
 .PHONY: all
 all: $(NAME)
@@ -233,7 +233,7 @@ rm_test_files:
 tests: test_report
 tests_run: test_report
 test_report: $(TESTBIN)
-	@$(ECHO) $(CUNDERLN)$(CGREEN)TEST REPORT$(CRESET)
+	@$(ECHO$(NAME)) $(CUNDERLN)$(CGREEN)"TEST REPORT"$(CRESET)
 	@./$(TESTBIN) $(UTFLAGS)
 	@$(GCOV) $(COVFLAGS)
 
@@ -241,26 +241,26 @@ test_report: $(TESTBIN)
 clean: RULE := clean
 clean: OBJ += $(MAIN:.c=.o)
 clean: libfox rm_test_files
-	@$(ECHO) $(CRED)Delete$(CRESET) objects
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "objects"
 	@$(RM) $(OBJ)
-	@$(ECHO) $(CRED)Delete$(CRESET) dependancy files
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "dependancy files"
 	@$(RM) $(DEP)
-	@$(ECHO) $(CRED)Delete$(CRESET) coverage files
-	@$(RM) *.gc*
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "coverage files"
+	@$(RM) $(COV)
 
 .PHONY: fclean
 fclean: RULE := fclean
 fclean: OBJ += $(MAIN:.c=.o)
 fclean: libfox rm_test_files
-	@$(ECHO) $(CRED)Delete$(CRESET) objects
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "objects"
 	@$(RM) $(OBJ)
-	@$(ECHO) $(CRED)Delete$(CRESET) dependancy files
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "dependancy files"
 	@$(RM) $(DEP)
-	@$(ECHO) $(CRED)Delete$(CRESET) coverage files
-	@$(RM) *.gc*
-	@$(ECHO) $(CRED)Delete$(CRESET) $(BIN)
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "coverage files"
+	@$(RM) $(COV)
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "$(BIN)"
 	@$(RM) $(BIN)
-	@$(ECHO) $(CRED)Delete$(CRESET) $(TESTBIN)
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "$(TESTBIN)"
 	@$(RM) $(TESTBIN)
 
 .PHONY: re

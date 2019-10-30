@@ -70,14 +70,14 @@ if __name__ == "__main__":
   main()
 endef
 
-ifndef ECHO
+ifndef ECHO$(NAME)
   $(call export PROGBAR) $(file >progressbar.py,$(PROGBAR))
   T := $(shell $(MAKE) . $(MAKECMDGOALS)	\
        -nrRf $(firstword $(MAKEFILE_LIST)) 	\
-       ECHO="COUNT$(NAME)" | grep -c "COUNT$(NAME)")
+       ECHO$(NAME)="COUNT$(NAME)" | grep -c "COUNT$(NAME)")
   N := x
   C = $(words $N)$(eval N := x $N)
-  ECHO = python ./progressbar.py --stepno=$C --nsteps=$T
+  ECHO$(NAME) = python ./progressbar.py --stepno=$C --nsteps=$T
 endif
 
 # ----------------------- MAKEFILE STARTS FROM HERE -------------------------- #
@@ -144,17 +144,17 @@ COVFLAGS += --exclude='.*wrap_.*'
 %.a:
 	@if [ -e $@ ];                                  								\
 	then                                            								\
-	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
+	  $(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
 	  ar ru $(BIN) $^;                              								\
 	else                                            								\
-	  $(ECHO) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
+	  $(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
 	  ar rc $(BIN) $^;                              								\
 	fi
 
 %.o: CFLAGS += -MT $@ -MMD
 %.o: %.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@$(ECHO) $(CLIGHTGREEN)$(CBOLD)Compile OK ✓$(CRESET) $@
+	@$(ECHO$(NAME)) $(CLIGHTGREEN)$(CBOLD)Compile OK ✓$(CRESET) $@
 ##########################################
 
 
@@ -186,33 +186,33 @@ $(DEBUGBIN): $(SRC) $(DEBUGMAIN)
 .PHONY: tests test_report
 tests: test_report
 test_report: $(TESTBIN)
-	@$(ECHO) $(CUNDERLN)$(CGREEN)TEST REPORT$(CRESET)
+	@$(ECHO$(NAME)) $(CUNDERLN)$(CGREEN)TEST REPORT$(CRESET)
 	@./$(TESTBIN) $(UTFLAGS)
 	@$(RM) $(notdir $(DEPSRC:.c=.gc*))
 	@$(GCOV) $(COVFLAGS)
 
 .PHONY: clean
 clean:
-	@$(ECHO) $(CRED)Delete$(CRESET) objects
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) objects
 	@$(RM) $(OBJ)
-	@$(ECHO) $(CRED)Delete$(CRESET) dependancy files
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) dependancy files
 	@$(RM) $(DEP)
-	@$(ECHO) $(CRED)Delete$(CRESET) coverage files
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) coverage files
 	@$(RM) *.gc*
 
 .PHONY: fclean
 fclean:
-	@$(ECHO) $(CRED)Delete$(CRESET) objects
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) objects
 	@$(RM) $(OBJ)
-	@$(ECHO) $(CRED)Delete$(CRESET) dependancy files
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) dependancy files
 	@$(RM) $(DEP)
-	@$(ECHO) $(CRED)Delete$(CRESET) coverage files
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) coverage files
 	@$(RM) $(COV)
-	@$(ECHO) $(CRED)Delete$(CRESET) $(BIN)
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) $(BIN)
 	@$(RM) $(BIN)
-	@$(ECHO) $(CRED)Delete$(CRESET) $(TESTBIN)
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) $(TESTBIN)
 	@$(RM) $(TESTBIN)
-	@$(ECHO) $(CRED)Delete$(CRESET) $(DEBUGBIN)
+	@$(ECHO$(NAME)) $(CRED)Delete$(CRESET) $(DEBUGBIN)
 	@$(RM) $(DEBUGBIN)
 
 .PHONY: re
