@@ -43,7 +43,7 @@ __a((nonnull(1))) long fox_strtol(char const *s, char **endptr)
         *endptr = (str_t) s + size;
     if (size > 19)
         return 0;
-    for (sindex_t i = 0; i < size; ) {
+    for (hindex_t i = 0; i < size; ) {
         ret += CHAR_TO_N(s[i]);
         if (++i < size)
             ret *= 10;
