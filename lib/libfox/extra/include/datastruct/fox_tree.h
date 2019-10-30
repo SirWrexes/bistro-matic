@@ -5,6 +5,11 @@
 ** Binary trees are cool
 */
 
+/*
+** TODO: Implement lazy allocation
+** TODO: Implement index for lazy allocation
+*/
+
 #ifndef FOX_TREE_H
 #define FOX_TREE_H
 

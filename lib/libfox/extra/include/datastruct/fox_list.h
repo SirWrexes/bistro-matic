@@ -5,6 +5,12 @@
 ** Linked lists are useful !
 */
 
+/*
+** TODO: Implement lazy allocation
+** TODO: Implement index system for lazy allocation
+** TODO: Tests for delete_node
+*/
+
 #ifndef FOX_LIST_H
 #define FOX_LIST_H
 
@@ -21,7 +27,7 @@ typedef struct foxnode_s *foxnode_t;
 // ...unles you use this macro that creates a list that autodestroys itself
 // after use.
 #define autofoxlist_t __cleanup(shredder) foxlist_t
-#define paperblade (*listdata_destructor())
+#define paperblade    (*listdata_destructor())
 
 // This is just regular sorcery. Skip to the next part.
 typedef void (*paperblade_t)(void *);

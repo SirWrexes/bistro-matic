@@ -5,6 +5,10 @@
 ** Pile up things it's fun
 */
 
+/*
+**TODO: Implement an item index system for lazy allocation
+*/
+
 #ifndef FOX_STACK_H
 #define FOX_STACK_H
 
