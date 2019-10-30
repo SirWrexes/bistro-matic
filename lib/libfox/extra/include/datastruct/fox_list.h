@@ -56,7 +56,7 @@ __nonnull;
 // Destructor shall be a function pointer to the data destructor
 //   used to free data stored in the nodes.
 //   Can be NULL
-void list_destroy(foxlist_t *listptr, void (*destructor)(void *))
+void list_destroy(foxlist_t *listptr, void (*destructor)())
 __a((nonnull(1)));
 
 // Add a node to the list conatining data
@@ -82,7 +82,7 @@ __nonnull;
 // Destroy a node
 // Destructor shall be a pointer to the blablabla you know it by now
 //   Can be NULL
-void node_destroy(foxnode_t *nodeptr, void (*destructor)(void *))
+void node_destroy(foxnode_t *nodeptr, void (*destructor)())
 __a((nonnull(1)));
 
 #endif /* !FOX_LIST_H */
