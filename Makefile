@@ -1,23 +1,24 @@
 ##
 ## EPITECH PROJECT, 2019
-## [PROJECT NAME]
+## Bistro'matic
 ## File description:
-## [PROJECT DESCRIPTION]
+## Bis traumatique
 ##
 
 #
 # Config
 ##########################################
-NAME    :=  calc
-BIN     :=  $(NAME)
-TESTBIN :=  utests_$(NAME)
-SHELL   :=  /bin/bash
-MAKE    :=  make --no-print-directory -C
-RM      :=  rm -rf
-CP      :=  cp -t
-MV      :=  mv -t
-GCOV    :=  gcovr
-CC      :=  gcc
+NAME     :=  Bistro-matic
+BIN      :=  calc
+DEBUGBIN :=  debug_$(BIN)
+TESTBIN  :=  utests_$(BIN)
+SHELL    :=  /bin/bash
+MAKE     :=  make --no-print-directory -C
+RM       :=  rm -rf
+CP       :=  cp -t
+MV       :=  mv -t
+GCOV     :=  gcovr
+CC       :=  gcc
 .DEFAULT_GOAL := all
 COMPILEDBTARGET := all tests
 ##########################################
@@ -87,7 +88,7 @@ endif
 # Source
 ##########################################
 MAIN :=
-SRC  :=
+SRC  := ./src/datastruct/bignum_create.c
 SRC  +=
 ##########################################
 
@@ -95,7 +96,7 @@ SRC  +=
 #
 # Test sources
 ##########################################
-TEST :=
+TEST := ./tests/datastruct/test_bignum_create.c
 TEST +=
 ##########################################
 
@@ -120,7 +121,7 @@ TESTTMP :=
 ##########################################
 INCDIRS   := ./include
 # ----------------------------------------
-CFLAGS    := -Wall -Wextra
+CFLAGS    = -Wall -Wextra
 CFLAGS    += -Werror
 CFLAGS    += -fno-builtin
 CFLAGS    += $(foreach dir, $(INCDIRS), -iquote $(dir))
@@ -128,7 +129,7 @@ CFLAGS    += $(foreach dir, $(INCDIRS), -iquote $(dir))
 # ----------------------------------------
 OBJ       :=  $(SRC:.c=.o)
 DEP       :=  $(OBJ:.o=.d) $(MAIN:.c=.d)
-COV       :=  $(notdir $(DEP:.d=.gc*)) $(notdir $(TEST:.c=.gc*))
+COV       :=  $(notdir $(DEP:.d=.gc*)) $(notdir $(TEST:.c=.gc*)) $(notdir $(WRAPSRC:.c=.gc*))
 .PRECIOUS :=  $(DEP)
 -include $(DEP)
 ##########################################
@@ -146,7 +147,11 @@ FOXMODULES += string
 LDFLAGS    += $(foreach mod, $(FOXMODULES), -L./lib/libfox/$(strip $(mod)))
 LDLIBS     += $(foreach mod, $(FOXMODULES), -lfox_$(strip $(mod)))
 # ----------------------------------------
-RULE := all # Default value
+ifdef FOXMODULES
+    FOXRULE = $(FOXMODULES)
+else
+	FOXRULE = tests
+endif
 ##########################################
 
 
@@ -158,6 +163,7 @@ UTFLAGS   := --always-succeed --timeout 5
 COVFLAGS  := -s --exclude-unreachable-branches
 COVFLAGS  += --exclude='.*test_.*'
 COVFLAGS  += --exclude='.*wrap_.*'
+COVFLAGS  += --exclude-directories='lib/libfox'
 ##########################################
 
 
@@ -182,8 +188,9 @@ COVFLAGS  += --exclude='.*wrap_.*'
 ##########################################
 .PHONY: libfox
 libfox:
-	@$(ECHO$(NAME)) $(CORANGE)"Make libfox rule(s)"$(CRESET) $(CBOLD)$(foreach r,$(RULE),"$r")$(CRESET)
-	@$(MAKE) ./lib/libfox $(RULE)
+	@$(ECHO$(NAME)) $(CORANGE)"Make libfox rule(s)"$(CRESET) $(CBOLD)$(foreach r,$(FOXRULE),"$r")$(CRESET)
+	@echo
+	@$(MAKE) ./lib/libfox $(FOXRULE)
 
 .PHONY: compiledb
 compiledb:
@@ -194,35 +201,34 @@ build: libfox
 build: | $(FILES)
 	@$(CC) -o $(TARGET) $(CFLAGS) $(FILES) $(LDFLAGS)
 	@$(ECHO$(NAME)) $(CBOLD)"Link OK"$(CRESET)
-	@$(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)"Done compiling"$(CRESET) $(CLIGHTBLUE)$@$(CRESET)
+	@$(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)"Done compiling"$(CRESET) $(CLIGHTBLUE)$(TARGET)$(CRESET)
 
 .PHONY: all
 all: $(NAME)
-$(NAME): TARGET := $(NAME)
-$(NAME): COMPILEDBTARGET = $(NAME)
-$(NAME): RULE := $(FOXMODULES)
-$(NAME): OBJ  += $(MAIN:.c=.o)
-$(NAME): FILES := $(OBJ)
+$(NAME): TARGET          := $(BIN)
+$(NAME): COMPILEDBTARGET := $(NAME)
+$(NAME): FOXRULE         := $(FOXMODULES)
+$(NAME): OBJ             += $(MAIN:.c=.o)
+$(NAME): FILES           := $(OBJ)
 $(NAME): compiledb libfox
 $(NAME): $(MAIN:.c=.o) $(OBJ) build
 
 .PHONY: debug
-debug: TARGET := $(NAME)
-debug: RULE   := $(FOXMODULES)
-debug: CFLAGS += -ggdb3 -rdynamic
-debug: SRC    += $(MAIN)
+debug: TARGET  := $(DEBUGBIN)
+debug: FOXRULE := $(FOXMODULES)
+debug: CFLAGS  += -ggdb3 -rdynamic
+debug: SRC     += $(MAIN)
 debug: libfox
 	$(CC) -o $(NAME) $(CFLAGS) $(SRC) $(LDFLAGS) $(LDLIBS)
 
 .PHONY: tests
-tests: $(TESTBIN)
-$(TESTBIN): TARGET := $(TESTBIN)
-$(TESTBIN): COMPILEDBTARGET = $(TESTBIN)
-$(TESTBIN): FILES   += $(SRC) $(TEST) $(WRAPSRC)
-$(TESTBIN): CFLAGS  += --coverage
-$(TESTBIN): CFLAGS  += -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
-$(TESTBIN): LDFLAGS += -l criterion
-$(TESTBIN): RULE    := all
+$(TESTBIN): TARGET          := $(TESTBIN)
+$(TESTBIN): COMPILEDBTARGET := $(TESTBIN)
+$(TESTBIN): FILES           += $(SRC) $(TEST) $(WRAPSRC)
+$(TESTBIN): CFLAGS          += --coverage
+$(TESTBIN): CFLAGS          += -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
+$(TESTBIN): LDFLAGS         += -l criterion
+$(TESTBIN): FOXRULE         := $(FOXMODULES) tests
 $(TESTBIN): compiledb libfox rm_test_files build
 
 .PHONY: rm_test_files
@@ -238,8 +244,8 @@ test_report: $(TESTBIN)
 	@$(GCOV) $(COVFLAGS)
 
 .PHONY: clean
-clean: RULE := clean
-clean: OBJ += $(MAIN:.c=.o)
+clean: FOXRULE := clean
+clean: OBJ     += $(MAIN:.c=.o)
 clean: libfox rm_test_files
 	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "objects"
 	@$(RM) $(OBJ)
@@ -249,8 +255,8 @@ clean: libfox rm_test_files
 	@$(RM) $(COV)
 
 .PHONY: fclean
-fclean: RULE := fclean
-fclean: OBJ += $(MAIN:.c=.o)
+fclean: FOXRULE := fclean
+fclean: OBJ     += $(MAIN:.c=.o)
 fclean: libfox rm_test_files
 	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "objects"
 	@$(RM) $(OBJ)
@@ -264,7 +270,6 @@ fclean: libfox rm_test_files
 	@$(RM) $(TESTBIN)
 
 .PHONY: re
-re: RULE := re
-re: OBJ += $(MAIN:.c=.o)
-re: | libfox
-re: fclean rm_test_files all
+re:
+	@$(MAKE) . fclean
+	@$(MAKE) . $(.DEFAULT_GOAL)
