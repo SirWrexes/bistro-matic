@@ -32,14 +32,14 @@ paperblade_t *stackdata_destructor(void) __const;
 
 struct foxlist_s
 {
-    count_t nodes;  // Node count in the list
+    count_t nodes;  // Node count in the list (DON'T EDIT IT MANUALLY)
     foxnode_t head; // Top of the list
     foxnode_t tail; // Bottom of the list
 };
 
 struct foxnode_s
 {
-    index_t i;      // Position in the list
+    index_t i;      // Position in the list (DON'T EDIT THIS EITHER)
     void *data;     // Data container
     foxnode_t prev; // Previous node
     foxnode_t next; // Next node
@@ -65,13 +65,13 @@ bool list_addnode(foxlist_t list, void *data)
 __nonnull;
 
 // Remove a node from the list
-// data can either be
-//   ¤ a pointer to something contained in a node (will delete the first
-//     node which has a matching data pointer, starting from list->head)
-//   ¤ a pointer to a node from the list
-// destructor can be a pointer to a a destructor that frees data
-// Returns true when no match is found
-bool list_deletenode(foxlist_t list, void *data)
+// refptr can either be
+//   ¤ A pointer to something contained in a node (will delete the first
+//     node which has a matching refptr pointer, starting from list->head)
+//   ¤ A pointer to a node from the list
+// destructor can be a pointer to a a destructor that frees refptr
+// Returns true if no match is found
+bool list_deletenode(foxlist_t list, void *refptr, void (*destructor)())
 __a((nonnull(1,2)));
 
 // Create a node
