@@ -14,9 +14,9 @@
 
 typedef struct bignum_s
 {
-    str_t origin; // Origin string including sign(s)
-    str_t abs;    // Only the digits
-    size_t len;   // Number of digits in abs
+    str2c_t origin; // Origin string including sign(s)
+    str2c_t abs;    // Only the digits
+    size_t len;     // Number of digits in abs
     enum
     {
         POSITIVE = 0,
