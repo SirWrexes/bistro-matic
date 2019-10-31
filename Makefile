@@ -89,7 +89,8 @@ endif
 ##########################################
 MAIN :=
 SRC  := ./src/datastruct/bignum_create.c
-SRC  +=
+SRC  += ./src/datastruct/bignum_destroy.c
+SRC  += ./src/datastruct/str_to_bignum.c
 ##########################################
 
 
@@ -97,7 +98,8 @@ SRC  +=
 # Test sources
 ##########################################
 TEST := ./tests/datastruct/test_bignum_create.c
-TEST +=
+TEST += ./tests/datastruct/test_bignum_destroy.c
+TEST += ./tests/datastruct/test_str_to_bignum.c
 ##########################################
 
 
@@ -164,6 +166,11 @@ COVFLAGS  := -s --exclude-unreachable-branches
 COVFLAGS  += --exclude='.*test_.*'
 COVFLAGS  += --exclude='.*wrap_.*'
 COVFLAGS  += --exclude-directories='lib/libfox'
+REPORT_TEXT = "TEST REPORT"
+ifdef SHOW_BRANCHES
+    COVFLAGS += -b
+	REPORT_TEXT += "(showing branches)"
+endif
 ##########################################
 
 
@@ -193,7 +200,7 @@ compiledb:
 .PHONY: build
 build: libfox
 build: | $(FILES)
-	@$(CC) -o $(TARGET) $(CFLAGS) $(FILES) $(LDFLAGS)
+	@$(CC) -o $(TARGET) $(CFLAGS) $(FILES) $(LDFLAGS) $(LDLIBS)
 	@$(ECHO$(NAME)) $(CBOLD)"Link OK"$(CRESET)
 	@$(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)"Done compiling"$(CRESET) $(CLIGHTBLUE)$(TARGET)$(CRESET)
 
@@ -208,12 +215,13 @@ $(NAME): compiledb libfox
 $(NAME): $(MAIN:.c=.o) $(OBJ) build
 
 .PHONY: debug
-debug: TARGET  := $(DEBUGBIN)
-debug: FOXRULE := $(FOXMODULES)
-debug: CFLAGS  += -ggdb3 -rdynamic
-debug: SRC     += $(MAIN)
-debug: libfox
-	$(CC) -o $(NAME) $(CFLAGS) $(SRC) $(LDFLAGS) $(LDLIBS)
+debug: $(DEBUGBIN)
+$(DEBUGBIN): TARGET  := $(DEBUGBIN)
+$(DEBUGBIN): FOXRULE := $(FOXMODULES)
+$(DEBUGBIN): CFLAGS  += -ggdb3 -rdynamic
+$(DEBUGBIN): SRC     += $(MAIN)
+$(DEBUGBIN): compiledb libfox
+	$(CC) -o $(DEBUGBIN) $(CFLAGS) $(SRC) $(LDFLAGS) $(LDLIBS)
 
 .PHONY: tests
 $(TESTBIN): TARGET          := $(TESTBIN)
@@ -222,7 +230,7 @@ $(TESTBIN): FILES           += $(SRC) $(TEST) $(WRAPSRC)
 $(TESTBIN): CFLAGS          += --coverage
 $(TESTBIN): CFLAGS          += -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
 $(TESTBIN): LDFLAGS         += -l criterion
-$(TESTBIN): FOXRULE         := $(FOXMODULES) tests
+$(TESTBIN): FOXRULE         := $(FOXRULE) tests
 $(TESTBIN): compiledb libfox rm_test_files build
 
 .PHONY: rm_test_files
@@ -233,7 +241,7 @@ rm_test_files:
 tests: test_report
 tests_run: test_report
 test_report: $(TESTBIN)
-	@$(ECHO$(NAME)) $(CUNDERLN)$(CGREEN)"TEST REPORT"$(CRESET)
+	@$(ECHO$(NAME)) $(CUNDERLN)$(CGREEN)$(REPORT_TEXT)$(CRESET)
 	@./$(TESTBIN) $(UTFLAGS)
 	@$(GCOV) $(COVFLAGS)
 
@@ -262,6 +270,8 @@ fclean: libfox rm_test_files
 	@$(RM) $(BIN)
 	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "$(TESTBIN)"
 	@$(RM) $(TESTBIN)
+	@$(ECHO$(NAME)) $(CRED)"Delete"$(CRESET) "$(DEBUGBIN)"
+	@$(RM) $(DEBUGBIN)
 
 .PHONY: re
 re:
