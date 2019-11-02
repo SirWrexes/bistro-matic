@@ -18,6 +18,11 @@ Test(bignum_destroy, regular_usage)
     cr_assert_not_null(num);
     bignum_destroy(&num);
     cr_expect_null(num);
+    num = str_to_bignum("12");
+    cr_assert_not_null(num);
+    cr_assert_not_null(num->origin);
+    bignum_destroy(&num);
+    cr_expect_null(num);
 }
 
 Test(bignum_destroy, null_handling)

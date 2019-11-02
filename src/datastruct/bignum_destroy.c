@@ -14,6 +14,8 @@ void bignum_destroy(bignum_t *num)
 {
     if (*num == NULL)
         return;
+    if ((*num)->origin != NULL)
+        free((*num)->origin);
     free(*num);
     *num = NULL;
 }

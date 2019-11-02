@@ -13,10 +13,18 @@
 
 Test(infin_ops, regular_usage)
 {
-    cr_expect_eq(pick_opf('+'), &infin_add);
-    cr_expect_eq(pick_opf('-'), &infin_sub);
-    cr_expect_eq(pick_opf('*'), &infin_mul);
-    cr_expect_eq(pick_opf('/'), &infin_div);
-    cr_expect_eq(pick_opf('%'), &infin_mod);
-    cr_expect_null(pick_opf('\0'));
+    short prec = -5;
+
+    cr_expect_eq(pick_opf('+', &prec), &infin_add);
+    cr_expect_eq(prec, 0);
+    cr_expect_eq(pick_opf('-', &prec), &infin_sub);
+    cr_expect_eq(prec, 0);
+    cr_expect_eq(pick_opf('*', &prec), &infin_mul);
+    cr_expect_eq(prec, 1);
+    cr_expect_eq(pick_opf('/', &prec), &infin_div);
+    cr_expect_eq(prec, 1);
+    cr_expect_eq(pick_opf('%', &prec), &infin_mod);
+    cr_expect_eq(prec, 1);
+    cr_expect_null(pick_opf('\0', &prec));
+    cr_expect_eq(prec, -1);
 }

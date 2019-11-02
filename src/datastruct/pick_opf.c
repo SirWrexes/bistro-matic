@@ -9,14 +9,14 @@
 #include "infin_ops.h"
 
 __const
-opf_t pick_opf(char operator)
+opf_t pick_opf(char operator, short *precedence)
 {
     switch (operator) {
-        default: return NULL;
-        case '+': return &infin_add;
-        case '-': return &infin_sub;
-        case '*': return &infin_mul;
-        case '/': return &infin_div;
-        case '%': return &infin_mod;
+    default: *precedence = -1; return NULL;
+    case '+': *precedence = 0; return &infin_add;
+    case '-': *precedence = 0; return &infin_sub;
+    case '*': *precedence = 1; return &infin_mul;
+    case '/': *precedence = 1; return &infin_div;
+    case '%': *precedence = 1; return &infin_mod;
     }
 }

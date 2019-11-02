@@ -14,8 +14,8 @@
 
 typedef struct bignum_s
 {
-    str2c_t origin; // Origin string including sign(s)
-    str2c_t abs;    // Only the digits
+    str_t origin; // Origin string including sign(s)
+    str_t abs;    // Only the digits
     size_t len;     // Number of digits in abs
     enum
     {
@@ -35,7 +35,7 @@ __nonnull;
 
 // Convert a string into a bignum
 // Returns NULL in case of error
-bignum_t str_to_bignum(str2c_t str)
+bignum_t str_to_bignum(str_t str)
 __nonnull;
 
 #endif /* !BIGNUM_H */

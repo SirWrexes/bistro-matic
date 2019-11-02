@@ -93,6 +93,8 @@ SRC  += ./src/datastruct/bignum_destroy.c
 SRC  += ./src/datastruct/str_to_bignum.c
 SRC  += ./src/datastruct/pick_opf.c
 SRC  += ./src/datastruct/tndata_create.c
+SRC  += ./src/datastruct/tndata_destroy.c
+SRC  += ./src/datastruct/expr_to_postfix_list.c
 SRC  += ./src/infin_ops/ops.c
 ##########################################
 
@@ -105,6 +107,7 @@ TEST += ./tests/datastruct/test_bignum_destroy.c
 TEST += ./tests/datastruct/test_str_to_bignum.c
 TEST += ./tests/datastruct/test_pick_opf.c
 TEST += ./tests/datastruct/test_tndat_create.c
+TEST += ./tests/datastruct/test_tndata_destroy.c
 ##########################################
 
 

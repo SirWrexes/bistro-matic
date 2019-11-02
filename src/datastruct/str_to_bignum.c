@@ -5,48 +5,42 @@
 ** Convert a string to a bignum
 */
 
+#include <malloc.h>
 #include "fox_define.h"
 #include "fox_string.h"
 
 #include "datastruct/bignum.h"
 
 static __pure
-bool get_sign(str2c_t origin, str2c_t *abs)
+bool number_is_invalid(str_t numstr)
 {
-    bool sign = 0;
-
-    while (*origin == '+' || *origin == '-')
-        sign ^= (bool) (*origin++ == '-');
-    *abs = origin;
-    return sign;
+    numstr += fox_strspn(numstr, "+-");
+    if (!CHAR_IS_NUM(*numstr))
+        return true;
+    return false;
 }
 
-static __pure
-size_t get_numsize(str2c_t abs)
-{
-    size_t i = 0;
-
-    while (CHAR_IS_NUM(abs[i]))
-        i += 1;
-    return i;
-}
-
-bignum_t str_to_bignum(str2c_t numstr)
+__nonnull
+bignum_t str_to_bignum(str_t numstr)
 {
     bignum_t num = NULL;
-    str2c_t abs = NULL;
-    str2c_t origin = numstr + fox_strspn(numstr, STR_WHITESPACE);
-    unsigned char sign = get_sign(origin, &abs);
-    size_t size = get_numsize(abs);
+    str_t tmp = NULL;
 
-    if (!fox_isinstr(*origin, "+-" STR_NUMERIC)
-        || !fox_isinstr(*abs, STR_NUMERIC))
+    if (number_is_invalid(numstr) || bignum_create(&num))
         return NULL;
-    if (bignum_create(&num))
-        return NULL;
-    num->origin = origin;
-    num->abs = abs;
-    num->len = size;
-    num->sign = sign % 2;
+    num->origin = malloc((num->len + 1) * sizeof(*num->origin));
+    if (num->origin == NULL)
+        RETURN(NULL, bignum_destroy(&num));
+    tmp = num->origin;
+    while (*numstr == '-' || *numstr == '+') {
+        *tmp++ = *numstr;
+        num->sign ^= (bool) (*numstr++ == '-');
+    }
+    num->abs = tmp;
+    while (CHAR_IS_NUM(*numstr)) {
+        *tmp++ = *numstr++;
+        num->len += 1;
+    }
+    *tmp = '\0';
     return num;
 }
