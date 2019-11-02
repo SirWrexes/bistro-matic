@@ -33,9 +33,9 @@ __nonnull;
 void bignum_destroy(bignum_t *num)
 __nonnull;
 
-// Convert a string into a bignum
+// Convert a string into a bignum and advance past the number
 // Returns NULL in case of error
-bignum_t str_to_bignum(str_t str)
+bignum_t str_to_bignum(str_t *str)
 __nonnull;
 
 #endif /* !BIGNUM_H */

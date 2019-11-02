@@ -15,24 +15,26 @@
 
 Test(str_to_bignum, valid_strings)
 {
-    hcount_t ntests = 4;
     str_t str[] = {
         "42",
         "-23",
         "---42",
         "+1337sauce",
+        NULL
     };
     str_t origin[] = {
         "42",
         "-23",
         "---42",
-        "+1337"
+        "+1337",
+        NULL
     };
     str_t abs[] = {
         origin[0],
         origin[1] + 1,
         origin[2] + 3,
         origin[3] + 1,
+        NULL,
     };
     size_t len[] = {
         2u,
@@ -47,13 +49,14 @@ Test(str_to_bignum, valid_strings)
         POSITIVE,
     };
     bignum_t num[] = {
-        str_to_bignum(str[0]),
-        str_to_bignum(str[1]),
-        str_to_bignum(str[2]),
-        str_to_bignum(str[3]),
+        str_to_bignum(&str[0]),
+        str_to_bignum(&str[1]),
+        str_to_bignum(&str[2]),
+        str_to_bignum(&str[3]),
+        NULL
     };
 
-    for (hindex_t i = 0; i != ntests; i += 1) {
+    for (hindex_t i = 0; str[i] != NULL; i += 1) {
         cr_assert_not_null(num[i]);
         cr_expect_str_eq(num[i]->origin, origin[i]);
         cr_expect_str_eq(num[i]->abs, abs[i]);
@@ -64,15 +67,23 @@ Test(str_to_bignum, valid_strings)
 
 Test(str_to_bignum, invalid_strings)
 {
-    cr_expect_null(str_to_bignum("caca23"));
-    cr_expect_null(str_to_bignum("+"));
-    cr_expect_null(str_to_bignum("++--+  456"));
-    cr_expect_null(str_to_bignum("+ta soeur"));
+    str_t str[] = {
+        "caca23",
+        "+",
+        "++--+ 4685",
+        "-ta soeur",
+        NULL,
+    };
+
+    for (hindex_t i = 0; str[i] != NULL; i += 1)
+        cr_assert_null(str_to_bignum(&str[i]));
 }
 
 Test(broken_malloc, str_to_bignum, .init = fix_malloc, .fini = fix_malloc)
 {
+    str_t str[2] = {"+123", "-987"};
+
     malloc_counter = 1;
-    cr_expect_null(str_to_bignum("+123"));
-    cr_expect_null(str_to_bignum("-987"));
+    cr_expect_null(str_to_bignum(&str[0]));
+    cr_expect_null(str_to_bignum(&str[1]));
 }

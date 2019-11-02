@@ -14,7 +14,7 @@
 #include "datastruct/bignum.h"
 
 __nonnull
-bool tndata_create_num(tndata_t *tndata, str_t num)
+bool tndata_create_num(tndata_t *tndata, str_t *num)
 {
     if (tndata_create(tndata))
         return true;
@@ -24,12 +24,17 @@ bool tndata_create_num(tndata_t *tndata, str_t num)
 }
 
 __nonnull
-bool tndata_create_opf(tndata_t *tndata, char op)
+bool tndata_create_opf(tndata_t *tndata, str_t *op)
 {
-    if (tndata_create(tndata))
+    opf_t opf = NULL;
+    short prec = 0;
+
+    opf = pick_opf(*(*op)++, &prec);
+    if (opf == NULL || tndata_create(tndata))
         return true;
     (*tndata)->type = OPF;
-    (*tndata)->opf = pick_opf(op, &(*tndata)->prec);
+    (*tndata)->opf = opf;
+    (*tndata)->prec = prec;
     return false;
 }
 
