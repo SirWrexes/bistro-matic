@@ -19,37 +19,30 @@
 
 /* ------------------------------------------------------------------------ */
 
+
+/* ------------------------------------------------------------------------ */
+
 // Remember: These are dynamically allocated pointers.
 // You MUST use the corresponding destructor when you're done with them.
-typedef struct foxlist_s *foxlist_t;
-typedef struct foxnode_s *foxnode_t;
+typedef struct foxnode_s
+{
+    index_t i;              // Position in the list (DON'T EDIT IT MANUALLY)
+    void *data;             // Data container
+    struct foxnode_s *prev; // Previous node
+    struct foxnode_s *next; // Next node
+} * foxnode_t;
+
+typedef struct
+{
+    count_t nodes;  // Node count in the list (DON'T EDIT THIS EITHER)
+    foxnode_t head; // Top of the list
+    foxnode_t tail; // Bottom of the list
+} * foxlist_t;
 
 // ...unles you use this macro that creates a list that autodestroys itself
 // after use.
 #define autofoxlist_t __cleanup(shredder) foxlist_t
 #define paperblade    (*listdata_destructor())
-
-// This is just regular sorcery. Skip to the next part.
-typedef void (*paperblade_t)(void *);
-void shredder(foxlist_t *listptr) __nonnull;
-paperblade_t *stackdata_destructor(void) __const;
-
-/* ------------------------------------------------------------------------ */
-
-struct foxlist_s
-{
-    count_t nodes;  // Node count in the list (DON'T EDIT IT MANUALLY)
-    foxnode_t head; // Top of the list
-    foxnode_t tail; // Bottom of the list
-};
-
-struct foxnode_s
-{
-    index_t i;      // Position in the list (DON'T EDIT THIS EITHER)
-    void *data;     // Data container
-    foxnode_t prev; // Previous node
-    foxnode_t next; // Next node
-};
 
 /* ------------------------------------------------------------------------ */
 
@@ -90,5 +83,12 @@ __nonnull;
 //   Can be NULL
 void node_destroy(foxnode_t *nodeptr, void (*destructor)())
 __a((nonnull(1)));
+
+/* ------------------------------------------------------------------------ */
+
+// This is just regular sorcery. Disregard it.
+typedef void (*paperblade_t)(void *);
+void shredder(foxlist_t *listptr) __nonnull;
+paperblade_t *stackdata_destructor(void) __const;
 
 #endif /* !FOX_LIST_H */

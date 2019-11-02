@@ -29,7 +29,7 @@ bool tndata_create_opf(tndata_t *tndata, char op)
     if (tndata_create(tndata))
         return true;
     (*tndata)->type = OPF;
-    (*tndata)->opf = pick_opf(op);
+    (*tndata)->opf = pick_opf(op, &(*tndata)->prec);
     return false;
 }
 
