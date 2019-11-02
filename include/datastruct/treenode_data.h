@@ -40,12 +40,12 @@ __nonnull;
 
 // Create an operator function node data
 // Returns true in case of error
-bool tndata_create_opf(tndata_t *tndata, char op)
+bool tndata_create_opf(tndata_t *tndata, str_t *op)
 __nonnull;
 
 // Create a bignum node data
 // Returns true in case of error
-bool tndata_create_num(tndata_t *tndata, str_t num)
+bool tndata_create_num(tndata_t *tndata, str_t *num)
 __nonnull;
 
 // Destroy a treenode data structure
