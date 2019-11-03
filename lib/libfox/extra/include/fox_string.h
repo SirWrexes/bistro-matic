@@ -16,6 +16,10 @@
 size_t fox_strlen(str2c_t str)
 __nonnull __pure;
 
+// Compare two strings
+char fox_strcmp(str2c_t s1, str2c_t s2)
+__nonnull __pure;
+
 // Copy src into dest up to n characters
 str_t fox_strncpy(str_t dest, str2c_t s, size_t n)
 __nonnull;

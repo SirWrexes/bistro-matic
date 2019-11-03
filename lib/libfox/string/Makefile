@@ -86,8 +86,10 @@ endif
 #
 # Sources
 ##########################################
+DEBUGMAIN := ./src/debugmain.c
 SRC := ./src/fox_isinstr.c
 SRC += ./src/fox_revstr.c
+SRC += ./src/fox_strcmp.c
 SRC += ./src/fox_strcspn.c
 SRC += ./src/fox_strlen.c
 SRC += ./src/fox_strncpy.c
@@ -100,12 +102,13 @@ SRC += ./src/fox_strspn.c
 ##########################################
 TST := ./tests/test_fox_isinstr.c
 TST += ./tests/test_fox_revstr.c
+TST += ./tests/test_fox_strcmp.c
 TST += ./tests/test_fox_strcspn.c
 TST += ./tests/test_fox_strlen.c
 TST += ./tests/test_fox_strncpy.c
 TST += ./tests/test_fox_strspn.c
 ##########################################
-WRAPSRC := ./tests/wrappers/wrap_malloc.c
+WRAPSRC := ./tests/wrappers/test_wrapped_malloc.c
 WRAPPED := malloc
 ##########################################
 
@@ -135,6 +138,9 @@ COVFLAGS := -s --exclude-unreachable-branches
 COVFLAGS += $(foreach s, $(DEPSRC), -e $(notdir $(s)))
 COVFLAGS += --exclude='.*test_.*'
 COVFLAGS += --exclude='.*wrap_.*'
+ifdef SHOW_BRANCHES
+    COVFLAGS += -b
+endif
 ##########################################
 
 
