@@ -63,6 +63,7 @@
     // For more information about these, check GNU GCC's docs
     // CAREFUL: These have RESTRICTED PORTABILITY
     #define __a(attributes)    __attribute__(attributes)
+    #define __fallthrough      __a((fallthrough))
     #define __const            __a((const))
     #define __cleanup(janitor) __a((cleanup(janitor)))
     #define __malloc           __a((malloc))

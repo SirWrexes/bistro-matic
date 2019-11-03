@@ -95,6 +95,7 @@ SRC  += ./src/datastruct/pick_opf.c
 SRC  += ./src/datastruct/tndata_create.c
 SRC  += ./src/datastruct/tndata_destroy.c
 SRC  += ./src/datastruct/expr_to_postfix_list.c
+SRC  += ./src/datastruct/postfix_list_to_tree.c
 SRC  += ./src/infin_ops/ops.c
 ##########################################
 
