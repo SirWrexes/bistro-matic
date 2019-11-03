@@ -19,9 +19,6 @@
 
 /* ------------------------------------------------------------------------ */
 
-
-/* ------------------------------------------------------------------------ */
-
 // Remember: These are dynamically allocated pointers.
 // You MUST use the corresponding destructor when you're done with them.
 typedef struct foxnode_s
