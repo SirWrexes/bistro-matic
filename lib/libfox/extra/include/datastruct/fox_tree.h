@@ -75,13 +75,13 @@ bool tnode_create(foxtnode_t *leafptr, void *data, foxtree_t root)
 __a((nonnull(1)));
 
 // Recursively destroy a node and it left/right leaves
-//   ¤ Also destro data with a function pointed by destructor
-//   ¤ destructor can be NULL, in this case, data is left untouched
-//   ¤ Destructor will be called with the adress of pointer's data (&node->data)
-//       Thus, destructor should take a pointer to the data type you want to free.
-//       This way you can also set it to NULL.
-//   ¤ In order to avoid crashes, be sure that every data field in your tree
-//       is of the same type if you want to use a destructor on it.
+// ¤ Also destroy data with a function pointed by destructor
+// ¤ destructor can be NULL, in this case, data is left untouched
+// ¤ Destructor will be called with the adress of pointer's data (&node->data)
+//   Thus, destructor should take a pointer to the data type you want to free.
+//   This way you can also set it to NULL.
+// ¤ In order to avoid crashes, be sure that every data field in your tree
+//   is of the same type if you want to use a destructor on it.
 void tnode_destroy(foxtnode_t *node, void (*destructor)())
 __a((nonnull(1)));
 
