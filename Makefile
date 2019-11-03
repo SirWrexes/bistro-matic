@@ -87,7 +87,7 @@ endif
 #
 # Source
 ##########################################
-MAIN :=
+MAIN := ./src/main.c
 SRC  := ./src/datastruct/bignum_create.c
 SRC  += ./src/datastruct/bignum_destroy.c
 SRC  += ./src/datastruct/str_to_bignum.c
@@ -97,6 +97,7 @@ SRC  += ./src/datastruct/tndata_destroy.c
 SRC  += ./src/datastruct/expr_to_postfix_list.c
 SRC  += ./src/datastruct/postfix_list_to_tree.c
 SRC  += ./src/infin_ops/ops.c
+SRC  += ./src/show_usage.c
 ##########################################
 
 
@@ -109,6 +110,7 @@ TEST += ./tests/datastruct/test_str_to_bignum.c
 TEST += ./tests/datastruct/test_pick_opf.c
 TEST += ./tests/datastruct/test_tndat_create.c
 TEST += ./tests/datastruct/test_tndata_destroy.c
+TEST += ./tests/test_show_usage.c
 ##########################################
 
 
@@ -151,6 +153,7 @@ COV       :=  $(notdir $(DEP:.d=.gc*)) $(notdir $(TEST:.c=.gc*)) $(notdir $(WRAP
 INCDIRS    += ./lib/libfox/extra/include
 # ----------------------------------------
 FOXMODULES += datastruct
+FOXMODULES += io
 FOXMODULES += std
 FOXMODULES += string
 # ----------------------------------------
