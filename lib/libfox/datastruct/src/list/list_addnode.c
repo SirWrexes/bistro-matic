@@ -18,7 +18,7 @@ bool list_addnode(foxlist_t list, void *data)
     if (list->tail == NULL) {
         list->head = new;
         list->tail = new;
-    } else  {
+    } else {
         new->prev = list->tail;
         list->tail->next = new;
         list->tail = new;
