@@ -59,4 +59,3 @@ Test(list_destroy, null_list)
     list_destroy(&list, NULL);
     cr_assert(true);
 }
-

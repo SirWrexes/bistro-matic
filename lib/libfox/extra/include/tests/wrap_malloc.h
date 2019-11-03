@@ -31,6 +31,4 @@ void break_malloc(void);
 // (Or use the "borken_malloc" test suite for that matter)
 void fix_malloc(void);
 
-TestSuite(broken_malloc, .fini = fix_malloc);
-
 #endif /* !WRAP_MALLOC_H */
