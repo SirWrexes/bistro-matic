@@ -9,7 +9,7 @@
 #define TREENODE_DATA_H
 
 #include "fox_define.h"
-#include "datastruct/fox_list.h"
+#include "fox_datastruct.h"
 
 #include "datastruct/bignum.h"
 
@@ -57,10 +57,14 @@ __nonnull;
 opf_t pick_opf(char op, short *precedence)
 __nonnull __const;
 
-// Convert an expression to a revese polish notation list
-// In case of error, returns the list, even if NULL or incomplete
-// (Yeah it kinda sucks I know but there shouldn't be any error)
+// Convert an expression to a reverse polish notation list
+// Returns NULL in case of error
 foxlist_t expr_to_postfix_list(str_t expr)
+__nonnull;
+
+// Convert a RPN list to a binary tree
+// Returns NULL in case of error
+foxtree_t postfix_list_to_tree(foxlist_t list)
 __nonnull;
 
 #endif /* !TREENODE_DATA_H */
