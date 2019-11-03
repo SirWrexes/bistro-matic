@@ -2,13 +2,13 @@
 ## EPITECH PROJECT, 2019
 ## Libfox
 ## File description:
-## Standard module
+## Input/Output module
 ##
 
 #
 # Config
 ##########################################
-NAME     :=  std
+NAME     :=  io
 BIN      :=  libfox_$(NAME).a
 TESTBIN  :=  utests_$(NAME)
 DEBUGBIN :=  debug_$(NAME)
@@ -22,6 +22,7 @@ CC       :=  gcc
 .DEFAULT_GOAL := all
 COMPILEDBTARGET := all tests debug
 ##########################################
+
 
 #
 # Colours
@@ -85,7 +86,8 @@ endif
 #
 # Sources
 ##########################################
-SRC := ./src/fox_strtol.c
+#DEBUGMAIN := ./src/debugmain.c
+SRC := ./src/fox_dpustr.c
 SRC +=
 ##########################################
 
@@ -93,19 +95,18 @@ SRC +=
 #
 # External source dependancy + tests
 ##########################################
-DEPSRC := ../string/src/fox_strspn.c
-DEPSRC += ../string/src/fox_strcspn.c
-DEPSRC += ../string/src/fox_isinstr.c
+DEPSRC := ../string/src/fox_strlen.c
+DEPSRC +=
 ##########################################
 
 
 #
 # Tests
 ##########################################
-TST := ./tests/test_fox_strtol.c
+TST := ./tests/test_fox_dputstr.c
 TST +=
 ##########################################
-WRAPSRC := ./tests/wrappers/wrap_malloc.c
+WRAPSRC := ./tests/wrappers/test_wrapped_malloc.c
 WRAPPED := malloc
 ##########################################
 
@@ -117,7 +118,7 @@ INCDIRS     := ./include
 CFLAGS      := -Wall -Wextra
 CFLAGS      += -Werror
 CFLAGS      += $(foreach dir, $(INCDIRS), -iquote $(dir))
-WRAPFLAGS   := -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
+CFLAGS      += -Wl$(foreach wrap, $(WRAPPED),,--wrap=$(wrap))
 ##########################################
 OBJ         := $(SRC:.c=.o) $(DEPSRC:.c=.o)
 DEP         := $(OBJ:.o=.d) $(DEPSRC:.c=.d)
@@ -135,6 +136,9 @@ COVFLAGS := -s --exclude-unreachable-branches
 COVFLAGS += $(foreach s, $(DEPSRC), -e $(notdir $(s)))
 COVFLAGS += --exclude='.*test_.*'
 COVFLAGS += --exclude='.*wrap_.*'
+ifdef SHOW_BRANCHES
+    COVFLAGS += -b
+endif
 ##########################################
 
 
@@ -144,10 +148,10 @@ COVFLAGS += --exclude='.*wrap_.*'
 %.a:
 	@if [ -e $@ ];                                  								\
 	then                                            								\
-	  $(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);	\
+	  $(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)Updating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
 	  ar ru $(BIN) $^;                              								\
 	else                                            								\
-	  $(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);	\
+	  $(ECHO$(NAME)) $(CBOLD)$(CLIGHTBLUE)Creating$(CRESET) $(CLIGHTBLUE)$@$(CRESET);		\
 	  ar rc $(BIN) $^;                              								\
 	fi
 
