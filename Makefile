@@ -115,7 +115,7 @@ TEST += ./tests/datastruct/test_tndata_destroy.c
 #
 # Wrapper sources
 ##########################################
-WRAPSRC := ./lib/libfox/extra/tests/wrappers/wrap_malloc.c
+WRAPSRC := ./lib/libfox/extra/tests/wrappers/test_wrapped_malloc.c
 WRAPPED := malloc
 ##########################################
 
@@ -136,7 +136,6 @@ CFLAGS    = -Wall -Wextra
 CFLAGS    += -Werror
 CFLAGS    += -fno-builtin
 CFLAGS    += $(foreach dir, $(INCDIRS), -iquote $(dir))
-
 # ----------------------------------------
 OBJ       :=  $(SRC:.c=.o)
 DEP       :=  $(OBJ:.o=.d) $(MAIN:.c=.d)
