@@ -23,6 +23,9 @@
     #define LIBFOX_MACRO_UNDEF
     #undef __a
     #undef __cleanup
+    #undef __const
+    #undef __fallthrough
+    #undef __malloc
     #undef __nonnull
     #undef __packed
     #undef __pure
