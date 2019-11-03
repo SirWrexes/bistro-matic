@@ -27,7 +27,7 @@ static bool process_current_node(str_t *expr, foxlist_t *li, foxstack_t *st)
 
     if (tndata_create_num(&data, expr) || list_addnode(*li, data))
         return creation_failed(li, st);
-    if (*expr == '\0')
+    if (**expr == '\0')
         return false;
     if (tndata_create_opf(&data, expr))
         return creation_failed(li, st);
