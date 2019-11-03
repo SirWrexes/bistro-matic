@@ -31,7 +31,8 @@ static bool process_current_node(str_t *expr, foxlist_t *li, foxstack_t *st)
         return false;
     if (tndata_create_opf(&data, expr))
         return creation_failed(li, st);
-    while ((*st)->items && ((tndata_t) (*st)->realtop->data)->prec >= data->prec)
+    while (
+        (*st)->items && ((tndata_t)(*st)->realtop->data)->prec >= data->prec)
         list_addnode(*li, stack_pop(*st));
     stack_push(*st, data);
     return false;
@@ -48,7 +49,7 @@ foxlist_t expr_to_postfix_list(str_t expr)
     while (*expr != '\0')
         if (process_current_node(&expr, &li, &st))
             return NULL;
-    while(st->items)
+    while (st->items)
         list_addnode(li, stack_pop(st));
     return li;
 }
